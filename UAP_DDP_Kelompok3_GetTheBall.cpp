@@ -103,3 +103,56 @@ int main() {
             ballX = rand() % maxX;
             ballY = 0;
         }
+// Menampilkan skor real-time di pojok kiri atas
+        mvprintw(0, 0, "Skor: %d", score);
+
+        // Memperbarui tampilan
+        refresh();
+
+        // Mengatur kecepatan jatuh bola
+        napms(speed);
+
+        // Menangani input dari pengguna untuk menggerakkan persegi panjang
+        int input = getch();
+        switch (input) {
+            case KEY_LEFT:
+                rectSpeedX = -rectSpeed;
+                rectSpeedY = 0;
+                break;
+            case KEY_RIGHT:
+                rectSpeedX = rectSpeed;
+                rectSpeedY = 0;
+                break;
+            case 'l': // Menambah panjang persegi panjang
+                rectLength++;
+                break;
+            default:
+                rectSpeedX = 0;
+                rectSpeedY = 0;
+                break;
+        }
+
+        // Memperbarui posisi persegi panjang
+        rectX = (rectX + rectSpeedX + maxX) % maxX;
+        rectY = (rectY + rectSpeedY + maxY) % maxY;
+    }
+
+    // Membersihkan layar
+    clear();
+    // Menampilkan skor akhir dan pesan "Game Over"
+    mvprintw(10, 10, "*****************************");
+    mvprintw(11, 10, "*         GAME OVER         *");
+    mvprintw(12, 10, "*      YOUR SCORE: %d      *", score);
+    mvprintw(13, 10, "*                           *");
+    mvprintw(14, 10, "*  PRESS 'ESC' TO EXIT      *");
+    mvprintw(15, 10, "*****************************");
+    refresh();
+
+    // Menunggu sampai pengguna menekan tombol ESC
+    while (getch() != 27);
+
+    // Menutup ncurses
+    endwin();
+
+    return 0;
+}
