@@ -48,3 +48,58 @@ int main() {
     getmaxyx(stdscr, maxY, maxX);
 
     srand(time(0));
+
+    int rectX = maxX / 2; // Posisi awal persegi panjang
+    int rectY = maxY - 3; // Posisi awal lebih ke atas 2 baris
+    int rectLength = 10;  // Panjang awal persegi panjang
+    int rectSpeed = 5;    // Kecepatan pergerakan persegi panjang
+    int rectSpeedX = 0;   // Kecepatan pergerakan horizontal
+    int rectSpeedY = 0;   // Kecepatan pergerakan vertikal
+
+    int ballX = rand() % maxX; // Posisi awal bola
+    int ballY = 0;
+
+    int ch;
+    int speed = 150; // Kecepatan jatuh bola, semakin kecil semakin cepat
+
+    int score = 0; // Skor awal
+
+    bool game_over = false;
+    bool start_menu = true;
+
+    while (start_menu) {
+        showCreativeStartMenu();
+        ch = getch();
+        switch (ch) {
+            case '1':
+                start_menu = false;
+                break;
+            case '2':
+                endwin(); // Menutup ncurses sebelum keluar
+                return 0;
+            default:
+                break;
+        }
+    }
+
+    while (!game_over) {
+        clear(); // Membersihkan layar
+
+        // Menggambar bola pada posisi baru
+        drawBall(ballX, ballY);
+        ballY++;
+
+        // Menggambar persegi panjang pada posisi baru
+        drawRectangle(rectX, rectY, rectLength);
+
+        // Jika bola mencapai batas bawah, game over
+        if (ballY >= maxY) {
+            game_over = true;
+        }
+
+        // Jika bola menyentuh persegi panjang, tambahkan skor dan reset bola
+        if (ballY == rectY && ballX >= rectX && ballX < rectX + rectLength) {
+            score++;
+            ballX = rand() % maxX;
+            ballY = 0;
+        }
